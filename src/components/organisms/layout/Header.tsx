@@ -1,10 +1,19 @@
 import { Box, Flex, Heading, Link, useDisclosure } from "@chakra-ui/react";
-import { memo, VFC } from "react";
+import { memo, useCallback, VFC } from "react";
+import { useHistory } from "react-router-dom";
 import { MenuIconButton } from "../../atoms/button/MenuIconButton";
 import { MenuDrawer } from "../../molecules/MenuDrawer";
 
 export const Header: VFC = memo(() => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const history = useHistory();
+
+  const onclickHome = useCallback(() => history.push("/home"), []);
+  const onclickUserManagement = useCallback(
+    () => history.push("/home/user_management"),
+    []
+  );
+  const onclickSetting = useCallback(() => history.push("/home/setting"), []);
   return (
     <>
       <Flex
@@ -14,7 +23,13 @@ export const Header: VFC = memo(() => {
         align="center"
         justify="space-between"
       >
-        <Flex align="center" as="a" mr={8} _hover={{ cursor: "pointer" }}>
+        <Flex
+          align="center"
+          as="a"
+          mr={8}
+          _hover={{ cursor: "pointer" }}
+          onClick={onclickHome}
+        >
           <Heading
             as="h1"
             fontSize={{ base: "md", md: "lg" }}
@@ -30,13 +45,19 @@ export const Header: VFC = memo(() => {
           display={{ base: "none", md: "flex" }}
         >
           <Box pr={4}>
-            <Link>ユーザー一覧</Link>
+            <Link onClick={onclickUserManagement}>ユーザー一覧</Link>
           </Box>
-          <Link>設定</Link>
+          <Link onClick={onclickSetting}>設定</Link>
         </Flex>
         <MenuIconButton onOpen={onOpen} />
       </Flex>
-      <MenuDrawer onClose={onClose} isOpen={isOpen} />
+      <MenuDrawer
+        onClose={onClose}
+        isOpen={isOpen}
+        onClickHome={onclickHome}
+        onclickUserManagement={onclickUserManagement}
+        onclickSetting={onclickSetting}
+      />
     </>
   );
 });
