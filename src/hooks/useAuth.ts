@@ -19,7 +19,8 @@ export const useAuth = () => {
           `https://jsonplaceholder.typicode.com/users/${id}`
         );
         if (response.data) {
-          setLoginUser(response.data);
+          const isAdmin = response.data.id === 10 ? true : false;
+          setLoginUser({ ...response.data, isAdmin });
           showMessage({ title: "ログインしました", status: "success" });
           history.push("/home");
         } else {
